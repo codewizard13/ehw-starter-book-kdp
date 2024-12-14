@@ -1,0 +1,5 @@
+(?<=#####\r)(.*)
+
+
+Line followed by [DATE]
+^.*\R(?=\[DATE\]$)

@@ -1,0 +1,164 @@
+figure {
+  margin-left: 0 !important;
+  max-width: 600px;
+  margin-top: 1.4rem;
+}
+img {
+  background: aliceblue !important;
+  /* max-width: 600px !important; */
+  width: 100%;
+  border: solid 2px navy !important;
+  box-shadow: 2px 3px 4px 1px darkgray;
+}
+figcaption {
+  /* background: aliceblue; */
+  padding: 0.4rem;
+  padding-left: 1rem;
+  font-size: 0.8rem;
+  font-style: italic;
+  margin-bottom: 2rem;
+}
+.fig-label {
+  font-weight: bold;
+  font-weight: 600; /* medium if it exists, else bold */
+  color: brown;
+  text-decoration: underline 1px;
+  width: 100%;
+}
+h3[id^="acf-field"] {
+  border-radius: 0 1rem 0 0;
+  background: aliceblue;
+  padding: 4px 1rem;
+  border: solid 1px navy;
+  border-bottom: 4px solid navy;
+  margin: 0.2rem;
+  display: inline-block;
+  font-weight: 400;
+}
+.field-label {
+  content: "field:";
+  margin-right: 0.4rem;
+  font-weight: bold;
+}
+h4[id="changes"] ~ h2 {
+  background: navy;
+  color: white;
+  padding: 0.6rem 1rem;
+  max-width: 80%;
+  /* display: inline-block; */
+  border-left: solid 1.2rem cornflowerblue;
+}
+[id*="gotcha"] {
+  background: pink;
+  color: brown;
+  font-weight: bold;
+  font-weight: 600;
+  padding: 1rem;
+  display: table;
+  max-width: 800px;
+  width: 80vw;
+  border: solid 1px;
+  border-left: solid 5px;
+  border-radius: 8px;
+}
+[id*="gotcha"]::before {
+  content: "⛔";
+  padding-right: 0.8rem;
+  font-size: 1.2rem;
+}
+/* Code within gotcha messages */
+[id*="gotcha"]:not(pre):not(.hljs) > code {
+  background: ivory;
+  font-size: inherit;
+  color: navy;
+  padding: 1px 5px 2px;
+  border-radius: 5px;
+}
+
+/* NOTE messages */
+[id*="note"] {
+  background: lightcyan;
+  color: midnightblue;
+  font-weight: bold;
+  font-weight: 600;
+  padding: 1rem;
+  display: table;
+  max-width: 800px;
+  width: 80vw;
+  border: solid 1px;
+  border-left: solid 5px;
+  border-radius: 8px;
+}
+[id*="note"]::before {
+  content: "🖋️";
+  padding-right: 0.8rem;
+  font-size: 1.2rem;
+}
+/* Code within note messages */
+[id*="note"]:not(pre):not(.hljs) > code {
+  background: ivory;
+  font-size: inherit;
+  color: navy;
+  padding: 1px 5px 2px;
+  border-radius: 5px;
+}
+
+/* TIP messages */
+[id*="tip"] {
+  background: lightyellow;
+  color: saddlebrown;
+  font-weight: bold;
+  font-weight: 600;
+  padding: 1rem;
+  display: table;
+  max-width: 800px;
+  width: 80vw;
+  border: solid 1px;
+  border-left: solid 5px;
+  border-radius: 8px;
+}
+[id*="tip"]::before {
+  content: "💡";
+  padding-right: 0.8rem;
+  font-size: 1.2rem;
+}
+/* Code within tip messages */
+[id*="tip"]:not(pre):not(.hljs) > code {
+  background: ivory;
+  font-size: inherit;
+  color: navy;
+  padding: 1px 5px 2px;
+  border-radius: 5px;
+}
+
+
+
+
+.site-deets dl {
+  /* width: 250px; */
+  display: flex;
+  flex-flow: row wrap;
+  border: 2px solid green;
+}
+.site-deets dl dt {
+  flex-basis: 20%;
+  padding: .4rem .8rem .9rem;
+  background: indigo;
+  text-align: left;
+  color: #fff;
+  margin: 0;
+  border-bottom: white solid 1px;
+}
+.site-deets dl dd {
+  flex-basis: 70%;
+  flex-grow: 1;
+  margin: 0;
+  text-align: left;
+  padding: .4rem .8rem .9rem;
+
+  border-bottom: 1px solid black;
+}
+.site-deets dl dt:last-of-type,
+.site-deets dl dd:last-of-type {
+  border-bottom: none;
+}

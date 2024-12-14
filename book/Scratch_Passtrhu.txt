@@ -1,0 +1,105 @@
+// Eric Hepperle - 2024-11-07, splitToSpreads.jsx
+#target "InDesign"
+
+// Function to show a dialog for page range input
+function showPageRangeDialog() {
+    var dialog = app.dialogs.add({name: "Set Page Range to Split"});
+    
+    // Add dialog elements for Start and End pages
+    with (dialog.dialogColumns.add()) {
+        staticTexts.add({staticLabel: "Start Page:"});
+        var startPageField = textEditboxes.add({editContents: ""});
+        staticTexts.add({staticLabel: "End Page:"});
+        var endPageField = textEditboxes.add({editContents: ""});
+    }
+
+    // Show dialog and get the result
+    var dialogResult = dialog.show();
+    var startPage = null;
+    var endPage = null;
+
+    if (dialogResult) {
+        // Get input values and validate as integers if possible
+        startPage = parseInt(startPageField.editContents, 10);
+        endPage = parseInt(endPageField.editContents, 10);
+
+        // Validate numeric inputs for CS6 compatibility
+        if (isNaN(startPage)) startPage = null;
+        if (isNaN(endPage)) endPage = null;
+        
+        dialog.destroy();
+    } else {
+        dialog.destroy();
+        return null; // User cancelled the dialog
+    }
+    
+    // Return start and end page numbers
+    return { startPage: startPage, endPage: endPage };
+}
+
+// Function to add zero-padding to file numbers (e.g., "001" instead of "1")
+function padNumber(num, totalDigits) {
+    var numStr = num.toString();
+    while (numStr.length < totalDigits) {
+        numStr = "0" + numStr;
+    }
+    return numStr;
+}
+
+// Function to split document into spread-based INDD files based on page range
+function splitDocumentIntoSpreads(pageRange) {
+    var mainDoc = app.activeDocument; // Get the active document
+    var spreadCount = mainDoc.spreads.length; // Count of spreads in the document
+    var basePath = mainDoc.filePath; // Get the file path for saving the new files
+    var paddingLength = 3; // Set zero-padding length (e.g., "001", "002", ...)
+
+    // Loop through each spread in the document
+    for (var i = 0; i < spreadCount; i++) {
+        var spread = mainDoc.spreads[i];
+        
+        // Calculate the first and last page numbers of the spread
+        var firstPageNumber = parseInt(spread.pages[0].name, 10); // First page in spread
+        var lastPageNumber = parseInt(spread.pages[spread.pages.length - 1].name, 10); // Last page in spread
+
+        // Check if the spread falls within the specified page range
+        if (pageRange.startPage && firstPageNumber < pageRange.startPage) continue;
+        if (pageRange.endPage && lastPageNumber > pageRange.endPage) continue;
+
+        // Create a new document with the same properties as the main document
+        var newDoc = app.documents.add();
+        newDoc.documentPreferences.pageWidth = mainDoc.documentPreferences.pageWidth;
+        newDoc.documentPreferences.pageHeight = mainDoc.documentPreferences.pageHeight;
+        newDoc.documentPreferences.facingPages = true; // Enable facing pages for CS6
+        newDoc.documentPreferences.intent = mainDoc.documentPreferences.intent;
+
+        // Disable page shuffling only for the initial spread in the new document
+        newDoc.spreads[0].allowPageShuffle = false;
+
+        // Duplicate each page individually in the correct left-right order
+        for (var j = 0; j < spread.pages.length; j++) {
+            spread.pages[j].duplicate(LocationOptions.AT_END, newDoc.pages[-1]);
+        }
+
+        // Remove the first empty page (created by default in the new document)
+        newDoc.pages[0].remove();
+
+        // Apply zero-padded numbering to the filename
+        var paddedNumber = padNumber(i + 1, paddingLength);
+        var fileName = "Spread_" + paddedNumber + ".indd";
+        var newFilePath = File(basePath + "/" + fileName);
+        
+        // Save and close the new document
+        newDoc.save(newFilePath);
+        newDoc.close(SaveOptions.YES);
+    }
+
+    alert("Document has been successfully split into spread-based INDD files with side-by-side pages.");
+}
+
+// Main script execution
+var pageRange = showPageRangeDialog();
+if (pageRange) {
+    splitDocumentIntoSpreads(pageRange);
+} else {
+    alert("Script cancelled.");
+}
